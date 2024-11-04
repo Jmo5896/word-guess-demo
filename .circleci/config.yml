@@ -4,17 +4,22 @@ orbs:
   cypress: cypress-io/cypress@3.3.1
 
 jobs:
+  hello-world-job:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - run: echo "Hello, World!"
   start-server:
-        docker:
-          - image: cypress/base:latest
-        steps:
-          - checkout
-          - run:
-              name: Install dependencies
-              command: npm install
-          - run:
-              name: Build the app
-              command: npm run build
+    docker:
+      - image: cypress/base:latest
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Build the app
+          command: npm run build
   deploy-to-render-staging:
     docker:
       - image: cimg/base:current
@@ -35,10 +40,13 @@ jobs:
             curl $RENDER_PRODUCTION_DEPLOYHOOK
 
 workflows:
+  hello-world-workflow:
+    jobs:
+      - hello-world-job
   run-tests-and-deploy-to-staging-hold-then-production:
     jobs:
       - start-server
-          # Make sure to add MONGODB_URI to ENVIRONMENT VARIABLES in CircleCI so that the tests can connect to the database
+        # Make sure to add MONGODB_URI to ENVIRONMENT VARIABLES in CircleCI so that the tests can connect to the database
       - cypress/run:
           name: run-component-tests
           cypress-command: npx cypress run --component
