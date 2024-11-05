@@ -21,6 +21,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(PORT, () => {
-  // this let's us know where the server is running
   console.log(`API server running on port ${PORT}!`);
 });
